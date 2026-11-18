@@ -7,7 +7,6 @@ const icons = {
   calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2m4 0h2m-8 4h2m4 0h2m-8 3h2m4 0h2"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18m-13 5h2m4 0h2"/>',
   compass: '<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5z"/>',
-  layers: '<path d="m12 3 9 5-9 5-9-5 9-5zm-9 9 9 5 9-5m-18 4 9 5 9-5"/>',
   card: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/>',
   book: '<path d="M12 6c-3-2-5-2-9-2v15c4 0 6 0 9 2 3-2 5-2 9-2V4c-4 0-6 0-9 2v15z"/>',
@@ -85,6 +84,40 @@ function renderDestinations() {
       <div class="destination-copy"><span class="tag">${place.season}</span><h3>${place.name}</h3><p>${place.summary}</p>
       <button type="button" class="text-button" data-destination="${place.id}" aria-label="View ${place.name} trip strategy">Trip strategy <span data-icon="arrow-right"></span></button></div>
     </article>`).join("");
+  paintIcons(list);
+}
+
+function renderFlightExamples() {
+  const list = byId("route-list");
+  list.innerHTML = flightExamples.map((route) => {
+    const program = firstOf(programs, route.program);
+    const {cash, points, fees} = route.quote;
+    const unit = route.program === "southwest" ? "points" : "miles";
+    const value = centsPerPoint(route.quote).toFixed(2);
+    const targetCash = fees + points * program.target / 100;
+
+    return `
+      <article class="route-card ${route.program}">
+        <div class="route-top">
+          <span class="route-airports">${route.from} <span data-icon="arrow-right"></span> ${route.to}</span>
+          <span class="tag">${route.basis}</span>
+        </div>
+        <h3>${route.title}</h3>
+        <p class="route-program">${program.name}</p>
+        <p class="route-price"><strong>${route.approximatePoints ? "~" : ""}${numberFormat.format(points)}</strong> ${unit} <span>+ ${cashFormat.format(fees)}${route.estimatedFees ? " est." : ""}</span></p>
+        <p>${route.observation}</p>
+        <p><strong>How to find it.</strong> ${route.search}</p>
+        <div class="route-value">
+          <p><strong>${value}¢ per ${unit === "points" ? "point" : "mile"}</strong> at a ${cashFormat.format(cash)} cash fare</p>
+          <p>${cashFormat.format(targetCash)} cash fare meets the ${program.target.toFixed(2)}¢ target</p>
+        </div>
+        ${linkedSources(route.links)}
+        <div class="route-actions">
+          <button type="button" class="text-button" data-use-flight="${route.id}" aria-label="Compare ${route.title} in the calculator">Run the numbers <span data-icon="calculator"></span></button>
+          <a class="text-button" href="${sources[route.booking][1]}" target="_blank" rel="noopener noreferrer" aria-label="Search awards for ${route.title}">Search awards <span data-icon="arrow-up-right"></span></a>
+        </div>
+      </article>`;
+  }).join("");
   paintIcons(list);
 }
 
@@ -253,6 +286,7 @@ function bookingWindow(date, days) {
 renderPrograms();
 renderCreditCards();
 renderDestinations();
+renderFlightExamples();
 renderTimeline();
 renderSources();
 paintIcons(document);
@@ -311,6 +345,10 @@ document.addEventListener("click", (event) => {
   if (action.useDestination) {
     const place = firstOf(destinations, action.useDestination);
     loadQuote({...place.quote, program: place.program, target: firstOf(programs, place.program).target, label: `${place.name} example`});
+  }
+  if (action.useFlight) {
+    const route = firstOf(flightExamples, action.useFlight);
+    loadQuote({...route.quote, program: route.program, target: firstOf(programs, route.program).target, label: `${route.from}–${route.to} example`});
   }
   if (action.reopen) {
     const quote = readSaved().find((entry) => entry.id === action.reopen);

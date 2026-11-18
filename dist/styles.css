@@ -98,6 +98,23 @@ img { display: block; max-width: 100%; }
 .footnote { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px; font-size: .78rem; margin: 16px 0 0; color: var(--muted); }
 .footnote > span { align-self: center; color: var(--purple); }
 .footnote a, .source-links a { color: var(--purple); }
+.routes-band { background: #f4f0f7; border-top: 1px solid var(--line); }
+.route-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
+.route-card { display: flex; flex-direction: column; align-items: stretch; border: 1px solid var(--line); border-radius: 14px; background: white; padding: 17px; }
+.route-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 7px; }
+.route-airports { display: inline-flex; align-items: center; gap: 5px; border-radius: 6px; padding: 4px 7px; font-size: .73rem; letter-spacing: .08em; font-weight: 700; color: var(--symbol-ink); background: var(--symbol-bg); }
+.route-card h3 { margin: 11px 0 4px; font: 700 1.25rem/1.18 var(--serif); letter-spacing: -.025em; }
+.route-card p { color: var(--muted); font-size: .84rem; margin: 0 0 9px; }
+.route-card p strong { color: var(--ink); }
+.route-card .route-program { font-size: .75rem; margin: 0; }
+.route-card .route-price { margin: 4px 0 8px; color: var(--ink); }
+.route-price strong { font-size: 1.65rem; letter-spacing: -.04em; }
+.route-price span { color: var(--muted); white-space: nowrap; }
+.route-value { background: #f5f0f9; border-radius: 7px; padding: 8px 9px; margin-top: auto; }
+.route-value p { font-size: .76rem; margin: 0; }
+.route-value p + p { margin-top: 2px; }
+.route-card .source-links { gap: 3px 9px; margin: 8px 0; font-size: .74rem; }
+.route-actions { display: flex; justify-content: space-between; flex-wrap: wrap; column-gap: 12px; border-top: 1px solid var(--line); padding-top: 6px; }
 .calc-band { background: #eee7f9; border-block: 1px solid #e6dcf1; }
 .calc-layout { display: grid; grid-template-columns: 1fr 1.25fr; align-items: center; gap: clamp(35px, 8vw, 115px); padding-block: 62px; }
 .calc-intro h2 em { font-weight: 500; color: var(--purple); }
@@ -177,6 +194,7 @@ dialog::backdrop { background: #201a37ab; }
 @media (max-width: 1000px) {
   .wrap { width: calc(100% - 60px); }
   .program-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .route-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .quick-arrow { display: none; }
 }
 @media (max-width: 760px) {
@@ -209,7 +227,7 @@ dialog::backdrop { background: #201a37ab; }
   .destination-image { max-height: 235px; }
 }
 @media (max-width: 440px) {
-  .program-grid, .credit-grid, .source-list { grid-template-columns: 1fr; }
+  .program-grid, .credit-grid, .route-grid, .source-list { grid-template-columns: 1fr; }
   .section-heading { margin-bottom: 20px; }
   .hero-actions .button { padding-inline: 10px; font-size: .77rem; }
   .calc-card { padding: 13px; }

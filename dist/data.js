@@ -4,11 +4,18 @@ const sources = {
   marriottAwards: ["Marriott award bookings and certificates", "https://help.marriott.com/s/article/book-with-marriott-bonvoy-points"],
   marriottFive: ["Marriott Stay for 5, Pay for 4", "https://help.marriott.com/s/article/stay-for-5-pay-for-4-benefit"],
   southwestAwards: ["Southwest reward flights", "https://www.southwest.com/rapid-rewards/points/how-to-redeem/"],
+  southwestCalendar: ["Southwest Low Fare Calendar", "https://www.southwest.com/air/low-fare-calendar/"],
+  southwestSanDiego: ["Southwest SFO–SAN fares", "https://www.southwest.com/en/flights/flights-from-san-francisco-to-san-diego"],
+  southwestVegas: ["Las Vegas sale screenshot", "https://upgradedpoints.com/news/southwest-fare-sale/"],
+  southwestSale: ["November Southwest award sale searches", "https://travel-on-points.com/southwest-award-sale-2/"],
   southwestPass: ["Southwest Companion Pass rules for 2026", "https://www.southwest.com/rapid-rewards/tiers/companion-pass"],
   southwest2027: ["Southwest 2027 Companion Pass changes", "https://www.southwest.com/rapid-rewards/2027/companion-pass-changes"],
   southwestFAQ: ["Southwest 2027 transition FAQ", "https://www.southwest.com/rapid-rewards/2027/help/"],
   unitedAwards: ["United MileagePlus award search", "https://www.united.com/en/us/book-flight/united-award-travel"],
+  unitedHonolulu: ["AwardTool SFO–HNL tracking", "https://www.awardtool.com/award-flights/san-francisco-sfo-to-honolulu-hnl/united-mileageplus"],
   aaAwards: ["American-operated flight awards", "https://www.aa.com/web/i18n/aadvantage-program/use-miles/american-airlines-flights.html"],
+  aaDeals: ["American’s award deals board", "https://www.aa.com/en-us/miles-deals"],
+  aaTokyo: ["American’s Tokyo award listing", "https://www.aa.com/en-us/miles-deals?c=EML%7C%7C20261109%7CMKT%7CUSPFMOC%7CBOOK%7C%7CUS_ROUTE_TRAN_MAXMILES_CTA"],
   aaFAQ: ["American award booking FAQ", "https://www.aa.com/web/i18n/aadvantage-program/answers-support/aadvantage-faq.html"],
   aaPartners: ["American partner award chart", "https://www.aa.com/pubcontent/en_US/aadvantage-program/use-miles/partner-airline-flights.html"],
   chaseTransfers: ["Chase transfer rules", "https://www.chase.com/personal/credit-cards/education/basics/how-to-transfer-chase-ultimate-rewards-points"],
@@ -47,13 +54,13 @@ const programs = [
     summary: "Domestic and Hawaiʻi flights, especially when traveling with a companion.",
     earn: "Earn on qualifying Southwest fares or with a Rapid Rewards card. Chase Sapphire Preferred transfers redeemable points at 1:1. Use Southwest’s qualification rules to track your progress toward Companion Pass.",
     steps: [
-      "Search your route in points and dollars. Point prices change with the fare, itinerary, and demand. Compare baggage and seat costs for the fare you’d really book.",
+      "Search your route in points and dollars. On short hops like SFO to San Diego, try the Low Fare Calendar during an award sale and compare baggage and seat costs for the fare you’d really book.",
       "With an eligible Companion Pass, book your own cash or points ticket first, then add your designated companion. The companion pays applicable taxes and fees, from $5.60 one-way.",
       "Through December 31, 2026, unlimited Companion Pass takes 135,000 qualifying points or 100 qualifying flights. A pass earned under those rules in 2026 runs through December 31, 2027.",
       "Starting January 1, 2027, get three companion trips at 95,000 Tier Qualifying Points or 75 qualifying flights. Unlimited companion trips require Platinum at 140,000 TQPs or 100 qualifying flights. Check the transition FAQ for any offer-specific exceptions."
     ],
     example: "An illustrative one-way U.S. flight at $165 cash or 11,000 points plus $5.60 yields 1.45¢ per point.",
-    quote: {cash: 165, points: 11000, fees: 5.6}, links: ["southwestAwards", "southwestPass", "southwest2027", "southwestFAQ", "sapphireRates"]
+    quote: {cash: 165, points: 11000, fees: 5.6}, links: ["southwestAwards", "southwestCalendar", "southwestPass", "southwest2027", "southwestFAQ", "sapphireRates"]
   },
   {
     id: "united", name: "United MileagePlus", type: "airline", icon: "globe", target: 1.30,
@@ -78,6 +85,57 @@ const programs = [
     ],
     example: "An illustrative domestic ticket at $200 cash or 12,500 miles plus $5.60 yields 1.56¢ per mile.",
     quote: {cash: 200, points: 12500, fees: 5.6}, links: ["aaAwards", "aaPartners", "aaFAQ", "strata", "platinum"]
+  }
+];
+
+const flightExamples = [
+  {
+    id: "sfo-san", from: "SFO", to: "SAN", title: "San Francisco to San Diego",
+    program: "southwest", basis: "Sale target", approximatePoints: true, estimatedFees: true,
+    quote: {cash: 59, points: 3000, fees: 5.60},
+    observation: "Southwest listed $59 Basic fares on this route. Use about 3,000 points as a sale target. Recent Southwest sale searches found that price on some domestic routes.",
+    search: "Switch the Low Fare Calendar to points. Try Tuesday or Wednesday, check OAK and SJC if convenient, and price the return separately.",
+    links: ["southwestSanDiego", "southwestSale"], booking: "southwestCalendar"
+  },
+  {
+    id: "las-sfo", from: "LAS", to: "SFO", title: "Las Vegas to San Francisco",
+    program: "southwest", basis: "Past sale", estimatedFees: true,
+    quote: {cash: 85, points: 5500, fees: 5.60},
+    observation: "Upgraded Points captured a 5,500-point fare in Southwest’s September 2026 sale. The cash fee here is an estimate.",
+    search: "Check weekday departures and compare with Sunday return prices. Review fare restrictions if your plans may change.",
+    links: ["southwestVegas"], booking: "southwestCalendar"
+  },
+  {
+    id: "sfo-hnl", from: "SFO", to: "HNL", title: "San Francisco to Honolulu",
+    program: "united", basis: "Tracked award",
+    quote: {cash: 325, points: 22500, fees: 5.60},
+    observation: "AwardTool saw this MileagePlus price on Nov 10, 2026, for a Nov 16 departure. It tracked nonstop economy from 22,800 miles.",
+    search: "Sign in to United and search flexible dates in miles. Toggle nonstop and check eligible cardholder pricing before deciding.",
+    links: ["unitedHonolulu"], booking: "unitedAwards"
+  },
+  {
+    id: "lax-jfk", from: "LAX", to: "JFK", title: "Los Angeles to New York",
+    program: "american", basis: "Airline listing",
+    quote: {cash: 170, points: 7500, fees: 6},
+    observation: "American listed this award for a Dec 31, 2026 departure. Check the date on your return separately.",
+    search: "Search AA’s one-way mileage calendar and compare JFK with Newark if the airport and ground costs work for you.",
+    links: ["aaDeals"], booking: "aaDeals"
+  },
+  {
+    id: "dfw-cdg", from: "DFW", to: "CDG", title: "Dallas to Paris",
+    program: "american", basis: "Airline listing",
+    quote: {cash: 425, points: 21000, fees: 6},
+    observation: "American listed this award for a Jul 22, 2027 departure. The return may have a different mileage price and higher taxes.",
+    search: "Compare nonstop and connecting options in AA’s calendar. Check the return and each itinerary’s fees before booking either direction.",
+    links: ["aaDeals"], booking: "aaDeals"
+  },
+  {
+    id: "sfo-hnd", from: "SFO", to: "HND", title: "San Francisco to Tokyo",
+    program: "american", basis: "Airline listing",
+    quote: {cash: 720, points: 35000, fees: 6},
+    observation: "American listed this Haneda award for an Oct 7, 2027 departure.",
+    search: "Search both Haneda and Narita. Check the operating airline, connection, and baggage, and confirm every seat before transferring.",
+    links: ["aaTokyo"], booking: "aaDeals"
   }
 ];
 
@@ -173,5 +231,6 @@ const timelines = [
 const referenceGroups = [
   ["Airline & hotel programs", ["marriottAwards", "marriottFive", "southwestAwards", "southwestPass", "southwest2027", "southwestFAQ", "unitedAwards", "aaAwards", "aaPartners", "aaFAQ"]],
   ["Card terms & transfers", ["chaseTransfers", "sapphire", "sapphireRates", "strata", "citiTransfers", "boundless", "southwestPlus", "explorer", "platinum", "platinumBenefits"]],
-  ["Fare research & destinations", ["googleTiming", "flights", "japan", "maui", "portugal", "flyingBlue"]]
+  ["Fare research & destinations", ["googleTiming", "flights", "japan", "maui", "portugal", "flyingBlue"]],
+  ["Flight sample sources", ["southwestCalendar", "southwestSanDiego", "southwestSale", "southwestVegas", "unitedHonolulu", "aaDeals", "aaTokyo"]]
 ];

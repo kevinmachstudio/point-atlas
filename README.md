@@ -1,6 +1,6 @@
 # Point Atlas
 
-A U.S. travel rewards cheatsheet with award program guides, card comparisons, destination examples, a cents-per-point calculator, a booking calendar, and browser-local saved comparisons.
+A U.S. travel rewards cheatsheet with award program guides, card comparisons, route-level award examples, a cents-per-point calculator, a booking calendar, and browser-local saved comparisons.
 
 Serve locally with `python3 -m http.server 8000 --directory dist` and visit `http://localhost:8000`. No build or dependencies are required.
 
