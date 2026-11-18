@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#201a37">
+  <meta name="description" content="A personal field guide to travel rewards. Compare airline and hotel programs, calculate cents per point, and plan when to book.">
+  <title>Point Atlas — The travel rewards field guide</title>
+  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./data.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="wrap top-inner">
+      <a class="brand" href="#top"><img src="./assets/mark.svg" width="34" height="34" alt=""><span>Point Atlas<span class="brand-period">.</span></span></a>
+      <nav aria-label="Main navigation">
+        <a href="#programs">Programs</a><a href="#cards">Credit cards</a><a href="#destinations">Destinations</a><a href="#calendar">When to book</a>
+      </nav>
+      <button type="button" class="saved-button" id="open-saved"><span data-icon="bookmark"></span><span>Saved</span><span id="saved-count" hidden></span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-visual" aria-hidden="true"></div>
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow hero-kicker"><span></span> THE TRAVEL REWARDS FIELD GUIDE</p>
+          <h1 id="hero-title">Go further<br><em>on points.</em></h1>
+          <p class="hero-description">Your personal cheat sheet for flights, hotels, and credit card rewards. Know what to earn, when to book, and where your points go furthest.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#programs">Explore programs <span data-icon="arrow-right"></span></a>
+            <a class="button outline" href="#calculator"><span data-icon="calculator"></span> Check a redemption</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quickbar" aria-label="Guide shortcuts">
+      <div class="wrap quick-inner">
+        <a href="#programs"><span class="quick-icon" data-icon="layers"></span><span><strong>Compare programs</strong><small>Airline miles & hotel points</small></span><span class="quick-arrow" data-icon="arrow-up-right"></span></a>
+        <a href="#cards"><span class="quick-icon" data-icon="card"></span><span><strong>Find your card</strong><small>Flexible points & brand perks</small></span><span class="quick-arrow" data-icon="arrow-up-right"></span></a>
+        <a href="#calculator"><span class="quick-icon" data-icon="calculator"></span><span><strong>Run the numbers</strong><small>Cash vs. points calculator</small></span><span class="quick-arrow" data-icon="arrow-up-right"></span></a>
+        <a href="#calendar"><span class="quick-icon" data-icon="calendar"></span><span><strong>Time your trip</strong><small>Holiday booking windows</small></span><span class="quick-arrow" data-icon="arrow-up-right"></span></a>
+      </div>
+    </section>
+
+    <section class="wrap section" id="programs" aria-labelledby="programs-title">
+      <div class="section-heading with-controls">
+        <div><p class="eyebrow section-kicker"><span data-icon="compass"></span> THE LOYALTY DIRECTORY</p><h2 id="programs-title">Rewards playbook</h2><p>Where to earn, what to look for, and how to spend each currency.</p></div>
+        <div class="segments" id="program-filters" role="group" aria-label="Filter loyalty programs">
+          <button type="button" data-filter="all" aria-pressed="true">All programs</button><button type="button" data-filter="airline" aria-pressed="false">Airlines</button><button type="button" data-filter="hotel" aria-pressed="false">Hotels</button>
+        </div>
+      </div>
+      <div class="program-grid" id="program-list"></div>
+      <p class="footnote"><span data-icon="info"></span> Value targets are planning inputs you can edit in the calculator. Award prices and availability vary by itinerary.</p>
+    </section>
+
+    <section class="calc-band" id="calculator" aria-labelledby="calculator-title">
+      <div class="wrap calc-layout">
+        <div class="calc-intro">
+          <p class="eyebrow section-kicker"><span data-icon="calculator"></span> THE REDEMPTION CALCULATOR</p>
+          <h2 id="calculator-title">Cash or <em>points?</em></h2>
+          <p>Use the cash price you’d actually pay for the same trip. Subtract award taxes and fees, then see what each point buys you.</p>
+          <details class="formula"><summary>See the formula</summary><p>(Comparable cash total − award cash costs) ÷ points × 100 = cents per point.</p></details>
+        </div>
+        <form id="calc-form" class="calc-card">
+          <div class="calc-form-grid">
+            <label>Program <select id="calc-program" name="program"></select></label>
+            <label>Target value (¢ / point) <input id="calc-target" name="target" type="number" min="0.01" max="100" step="0.01" value="1.30" required></label>
+            <label>Cash price ($) <input id="calc-cash" name="cash" type="number" min="0" max="10000000" step="0.01" value="320" required></label>
+            <label>Points required <input id="calc-points" name="points" type="number" min="1" max="100000000" step="1" value="20000" required></label>
+            <label>Award taxes and fees ($) <input id="calc-fees" name="fees" type="number" min="0" max="10000000" step="0.01" value="11.20" required></label>
+            <label>Trip label <input id="calc-label" name="label" maxlength="80" placeholder="Optional, e.g. Maui in September"></label>
+          </div>
+          <div class="calc-result" aria-live="polite"><div><strong id="cpp">1.54</strong> <span>¢ / point</span></div><div class="verdict"><strong id="verdict-title">Above your target</strong><small id="verdict-detail">$308.80 in cash avoided</small></div></div>
+          <button type="submit" class="button dark save-calc"><span data-icon="bookmark"></span> Save comparison</button>
+          <p class="save-status" id="save-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="wrap section" id="cards" aria-labelledby="cards-title">
+      <div class="section-heading with-controls">
+        <div><p class="eyebrow section-kicker"><span data-icon="card"></span> THE EARNING STRATEGY</p><h2 id="cards-title">Choose your credit card</h2><p>Start with the trips you take and the perks you’ll actually use.</p></div>
+        <div class="segments" id="card-filters" role="group" aria-label="Filter credit cards">
+          <button type="button" data-filter="all" aria-pressed="true">All cards</button><button type="button" data-filter="flexible" aria-pressed="false">Flexible</button><button type="button" data-filter="brand" aria-pressed="false">Co-branded</button>
+        </div>
+      </div>
+      <div class="card-primer"><span class="quick-icon" data-icon="info"></span><p><strong>You can book award travel with a free loyalty account and enough points.</strong> Choose a card for earning or for perks. Check bonus eligibility and spending requirements, and count only benefits you’ll use. Interest can wipe out the value of rewards.</p></div>
+      <div class="credit-grid" id="credit-list"></div>
+    </section>
+
+    <section class="destination-band" id="destinations" aria-labelledby="destinations-title">
+      <div class="wrap section">
+        <div class="section-heading"><p class="eyebrow section-kicker"><span data-icon="compass"></span> WHERE TO GO</p><h2 id="destinations-title">Three trips worth pricing</h2><p>Start with a season, a currency, and a concrete award to search for.</p></div>
+        <div class="destination-grid" id="destination-list"></div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="calendar" aria-labelledby="calendar-title">
+      <div class="section-heading">
+        <p class="eyebrow section-kicker"><span data-icon="calendar"></span> THE BOOKING CALENDAR</p>
+        <h2 id="calendar-title">Time the trip</h2>
+        <p>Compare cash fare trends with an early award-search timeline for U.S. departures.</p>
+      </div>
+      <div class="timeline-layout">
+        <div class="timeline-table" id="timeline-list"></div>
+        <form class="date-card" id="date-form">
+          <span class="quick-icon" data-icon="calendar"></span>
+          <h3>Build a search timeline</h3>
+          <label>Trip type <select id="date-type"></select></label>
+          <label>Departure date <input id="date-input" type="date" required></label>
+          <button class="button dark" type="submit">Show booking dates <span data-icon="arrow-right"></span></button>
+          <div class="date-result" id="date-result" aria-live="polite" hidden></div>
+        </form>
+      </div>
+      <p class="footnote"><span data-icon="info"></span> Cash ranges summarize historic average fares. Award lead times are planning suggestions. Search when your dates open and confirm live availability. <a id="calendar-source" target="_blank" rel="noopener noreferrer" href="https://blog.google/products-and-platforms/products/search/holiday-travel-trends-2026/">Google Flights research ↗</a></p>
+    </section>
+
+    <section class="source-band" id="sources" aria-labelledby="sources-title">
+      <div class="wrap section">
+        <div class="section-heading"><p class="eyebrow section-kicker"><span data-icon="book"></span> REFERENCE DESK</p><h2 id="sources-title">Sources & methodology</h2><p>Program rules, card terms, and travel research reviewed November 18, 2026.</p></div>
+        <div id="source-list" class="source-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="wrap footer-inner"><a class="brand" href="#top"><img src="./assets/mark.svg" width="30" height="30" alt=""><span>Point Atlas<span class="brand-period">.</span></span></a><span>Built for U.S. travelers. Comparisons are saved in this browser.</span><a href="#top">Back to top ↑</a></div></footer>
+
+  <dialog id="detail-dialog" aria-labelledby="detail-title">
+    <div class="dialog-shell">
+      <button class="close-dialog" type="button" aria-label="Close dialog" data-close><span data-icon="x"></span></button>
+      <p id="detail-kicker" class="eyebrow section-kicker"></p>
+      <h2 id="detail-title"></h2>
+      <div id="detail-content"></div>
+    </div>
+  </dialog>
+  <noscript><p class="noscript">Enable JavaScript to use the program directory, guides, and calculator.</p></noscript>
+</body>
+</html>
