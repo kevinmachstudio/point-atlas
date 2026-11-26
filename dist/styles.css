@@ -1,3 +1,22 @@
+@font-face {
+  font-family: "DM Sans";
+  src: url("./assets/fonts/dm-sans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("./assets/fonts/playfair-display.woff2") format("woff2");
+  font-weight: 500 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("./assets/fonts/playfair-display-italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 500 600;
+  font-display: swap;
+}
 :root {
   color-scheme: light;
   --ink: #242039;
@@ -10,9 +29,10 @@
   --line: #e8e4ee;
   --serif: "Playfair Display", Georgia, serif;
   --sans: "DM Sans", "Helvetica Neue", sans-serif;
+  --side-inset: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(104px + env(safe-area-inset-top, 0px)); }
 body { margin: 0; color: var(--ink); background: var(--paper); font: 16px/1.55 var(--sans); }
 body:has(dialog[open]) { overflow: hidden; }
 a { color: inherit; }
@@ -24,17 +44,20 @@ img { display: block; max-width: 100%; }
 [data-icon] svg { width: 1.12em; height: 1.12em; }
 :focus-visible { outline: 3px solid #8c68d7; outline-offset: 4px; }
 .skip { position: fixed; z-index: 10; top: -60px; left: 12px; padding: 8px 14px; color: white; background: var(--dark); }
-.skip:focus { top: 8px; }
-.wrap { width: min(1216px, calc(100% - 96px)); margin-inline: auto; }
-.topbar { background: #fcfbf8; position: sticky; z-index: 4; top: 0; border-bottom: 1px solid rgba(48, 34, 65, .08); }
+.skip:focus { top: calc(8px + env(safe-area-inset-top, 0px)); }
+.wrap { width: min(1216px, calc(100% - 2 * max(48px, var(--side-inset)))); margin-inline: auto; }
+.topbar { background: #fcfbf8; position: sticky; z-index: 4; top: 0; padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid rgba(48, 34, 65, .08); }
 .top-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 25px; }
 .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font: 700 24px/1 var(--serif); letter-spacing: -.05em; white-space: nowrap; }
 .brand-period { color: #8469b9; }
 .topbar nav { display: flex; gap: clamp(18px, 3vw, 38px); align-items: center; }
 .topbar nav a { text-decoration: none; color: #504861; white-space: nowrap; font-weight: 600; font-size: .88rem; }
 .topbar nav a:hover, .footer a:hover { color: var(--purple); text-decoration: underline; text-underline-offset: 4px; }
-.saved-button { background: transparent; border: 1px solid #ddd6e8; border-radius: 9px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; font-size: .85rem; font-weight: 700; }
-.saved-button:hover { background: #f0ebf8; }
+.header-actions { display: flex; gap: 7px; }
+.header-button { background: transparent; border: 1px solid #ddd6e8; border-radius: 9px; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 6px 11px; font-size: .85rem; font-weight: 700; white-space: nowrap; }
+.header-button:hover { background: #f0ebf8; }
+#install-app { background: #eee7f9; }
+#install-app:hover { background: #e7dcf5; }
 #saved-count { border-radius: 30px; padding: 1px 6px; background: #e7dbff; }
 .hero { position: relative; background: var(--dark); isolation: isolate; color: white; overflow: hidden; }
 .hero-visual { position: absolute; z-index: -1; inset: 0 0 0 auto; width: 66%; background: url("./assets/wing.jpg") center 58% / cover no-repeat; }
@@ -169,7 +192,7 @@ input::placeholder { color: #756e81; }
 .source-list summary { font-weight: 700; font-size: .9rem; cursor: pointer; }
 .source-list ul { margin: 8px 0 1px; padding-left: 20px; font-size: .86rem; }
 .source-list p { font-size: .85rem; color: var(--muted); margin: 8px 0 0; }
-.footer { background: #fbfaf7; border-top: 1px solid var(--line); }
+.footer { background: #fbfaf7; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding-block: 20px; font-size: .79rem; color: var(--muted); }
 .footer .brand { color: var(--ink); font-size: 20px; }
 dialog { width: min(610px, calc(100% - 30px)); max-height: 88dvh; border: 1px solid #e3dbea; border-radius: 16px; color: var(--ink); background: #fffdfb; padding: 0; }
@@ -192,18 +215,19 @@ dialog::backdrop { background: #201a37ab; }
 .saved-entry .text-button + .text-button { margin-left: 12px; }
 .noscript { margin: 8px 24px; }
 @media (max-width: 1000px) {
-  .wrap { width: calc(100% - 60px); }
+  .wrap { width: calc(100% - 2 * max(30px, var(--side-inset))); }
   .program-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .route-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .quick-arrow { display: none; }
 }
 @media (max-width: 760px) {
-  .wrap { width: calc(100% - 36px); }
+  .wrap { width: calc(100% - 2 * max(18px, var(--side-inset))); }
   .top-inner { flex-wrap: wrap; gap: 0; padding-top: 9px; min-height: 0; }
-  .topbar nav { order: 3; justify-content: space-between; gap: 9px; width: 100%; min-height: 40px; }
-  .topbar nav a { font-size: .76rem; }
+  .topbar nav { order: 3; justify-content: space-between; gap: 8px; width: 100%; }
+  .topbar nav a { display: flex; align-items: center; min-height: 44px; white-space: normal; font-size: .76rem; line-height: 1.25; }
   .brand { font-size: 21px; }
   .brand img { width: 29px; height: 29px; }
+  input, select { font-size: 1rem; }
   .hero-inner { min-height: 480px; padding-block: 49px 68px; }
   .hero h1 { font-size: clamp(3.9rem, 11vw, 5.5rem); }
   .hero-description { font-size: .94rem; width: min(340px, 96%); }
@@ -227,6 +251,8 @@ dialog::backdrop { background: #201a37ab; }
   .destination-image { max-height: 235px; }
 }
 @media (max-width: 440px) {
+  .header-actions { gap: 5px; }
+  .header-button { padding-inline: 7px; gap: 4px; font-size: .75rem; }
   .program-grid, .credit-grid, .route-grid, .source-list { grid-template-columns: 1fr; }
   .section-heading { margin-bottom: 20px; }
   .hero-actions .button { padding-inline: 10px; font-size: .77rem; }

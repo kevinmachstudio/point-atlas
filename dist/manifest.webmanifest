@@ -1,0 +1,20 @@
+{
+  "name": "Point Atlas",
+  "short_name": "Point Atlas",
+  "description": "Travel rewards guides, award flight examples, and a cash-versus-points calculator.",
+  "lang": "en-US",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#fcfbf8",
+  "background_color": "#faf9f6",
+  "icons": [
+    { "src": "./assets/app-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/app-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/app-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Redemption calculator", "short_name": "Calculator", "url": "./#calculator" },
+    { "name": "Sample flights", "url": "./#sample-flights" }
+  ]
+}

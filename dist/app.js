@@ -4,6 +4,7 @@ const icons = {
   "arrow-right": '<path d="M4 12h15m-6-6 6 6-6 6"/>',
   "arrow-up-right": '<path d="M6 18 18 6M8 6h10v10"/>',
   bookmark: '<path d="M6 5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v15l-6-4-6 4z"/>',
+  install: '<path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4"/>',
   calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2m4 0h2m-8 4h2m4 0h2m-8 3h2m4 0h2"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18m-13 5h2m4 0h2"/>',
   compass: '<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5z"/>',
@@ -283,6 +284,60 @@ function bookingWindow(date, days) {
   return days.length === 1 ? `By ${dateBefore(date, days[0])}` : `${dateBefore(date, days[1])} – ${dateBefore(date, days[0])}`;
 }
 
+function setupInstall() {
+  if (!("serviceWorker" in navigator)) return;
+
+  const installButton = byId("install-app");
+  const standalone = window.matchMedia("(display-mode: standalone)");
+  let installPrompt;
+  let installed = false;
+
+  const updateButton = () => {
+    installButton.hidden = installed || standalone.matches || navigator.standalone === true;
+  };
+  const updateOfflineStatus = () => {
+    const status = byId("offline-status");
+    if (status && navigator.serviceWorker.controller) status.textContent = "This copy is ready to use offline.";
+  };
+  const showInstallHelp = () => {
+    showDetail("HOME SCREEN", "Install Point Atlas", `
+      <h3>iPhone or iPad</h3><p>In Safari, tap Share, then <strong>Add to Home Screen</strong>. Turn on <strong>Open as Web App</strong> if shown, then tap <strong>Add</strong>.</p>
+      <h3>Android</h3><p>In Chrome, open the ⋮ menu and choose <strong>Install app</strong> or <strong>Install and create shortcut</strong>.</p>
+      <p id="offline-status" role="status">Open the app once while online to prepare it for offline use.</p>
+      <p>Airline, hotel, and other external links require a connection.</p>`);
+    updateOfflineStatus();
+  };
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    installPrompt = event;
+  });
+  window.addEventListener("appinstalled", () => {
+    installed = true;
+    installPrompt = undefined;
+    updateButton();
+  });
+  standalone.addEventListener("change", updateButton);
+  installButton.addEventListener("click", async () => {
+    const prompt = installPrompt;
+    installPrompt = undefined;
+    if (prompt) {
+      try {
+        await prompt.prompt();
+        return;
+      } catch {
+        // The browser can discard its prompt before the button is clicked.
+      }
+    }
+    showInstallHelp();
+  });
+  updateButton();
+  navigator.serviceWorker.addEventListener("controllerchange", updateOfflineStatus);
+  navigator.serviceWorker.register("./sw.js", {updateViaCache: "none"}).catch((error) => {
+    console.warn("Point Atlas offline setup failed.", error);
+  });
+}
+
 renderPrograms();
 renderCreditCards();
 renderDestinations();
@@ -296,6 +351,7 @@ quoteSelect.innerHTML = programs.map((program) => `<option value="${program.id}"
 quoteSelect.value = "united";
 updateCalculation();
 updateCount(readSaved().length);
+setupInstall();
 
 calcForm.addEventListener("input", (event) => {
   if (event.target === quoteSelect) {

@@ -19,8 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - run: node scripts/build.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: out
       - id: deploy
         uses: actions/deploy-pages@v4
